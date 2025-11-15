@@ -1,5 +1,6 @@
 package org.example.task2.component;
 
+
 public abstract class TextComponent {
 
     private TextComponentType componentType;

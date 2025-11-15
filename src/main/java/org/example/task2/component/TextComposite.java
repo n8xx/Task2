@@ -1,9 +1,16 @@
 package org.example.task2.component;
 
-import java.util.ArrayList;
 
-public class TextComposite extends TextComponent{
-    ArrayList<TextComponent> components = new ArrayList<>();
+import java.util.ArrayList;
+import java.util.List;
+
+
+public class TextComposite extends TextComponent {
+    private static final String TABULATION = "\t";
+    private static final String NEW_LINE = "\n";
+    private static final String SPACE = " ";
+    private ArrayList<TextComponent> components = new ArrayList<>();
+
 
     public TextComposite(TextComponentType textComponentType) {
         setComponentType(textComponentType);
@@ -15,13 +22,41 @@ public class TextComposite extends TextComponent{
     public void removeComponent(TextComponent textComponent) {
         components.remove(textComponent);
     }
+
+    public List<TextComponent> getComponents() {
+        return components;
+    }
+
+    public void setComponents(List<TextComponent> newComponents) {
+        this.components = new ArrayList<>(newComponents);
+    }
     @Override
     public String toString() {
-        StringBuilder stringBuilder = new StringBuilder();
+        StringBuilder sb = new StringBuilder();
+        for (TextComponent component : components) {
 
-        for(TextComponent component : components) {
-            stringBuilder.append(component.toString());
+            boolean needsPrefix = component.getComponentType() == TextComponentType.PARAGRAPH;
+            String delimiter = getDelimiter(component.getComponentType());
+
+            if (needsPrefix) {
+                sb.append(TABULATION);
+            }
+
+            sb.append(component);
+
+            if (delimiter != null) {
+                sb.append(delimiter);
+            }
         }
-        return stringBuilder.toString();
+        return sb.toString().stripTrailing();
+    }
+    private String getDelimiter(TextComponentType type) {
+        return switch (type) {
+            case PARAGRAPH -> NEW_LINE;
+            case SENTENCE -> SPACE;
+            case LEXEME -> null;
+            case WORD -> null;
+            default -> SPACE;
+        };
     }
 }

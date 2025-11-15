@@ -20,6 +20,7 @@ public class TextReaderImpl implements TextReader {
             URL resource = getClass().getClassLoader().getResource(path);
 
             if (resource == null) {
+                logger.info("file not found");
                 throw new TextException("File not found: " + path);
             }
 
@@ -35,5 +36,6 @@ public class TextReaderImpl implements TextReader {
             logger.warn("Uri problem for file "+path, e);
             throw new TextException("Uri problem for file "+path, e);
         }
+
     }
 }
